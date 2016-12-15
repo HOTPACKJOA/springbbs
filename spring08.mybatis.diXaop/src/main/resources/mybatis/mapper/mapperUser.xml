@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.model.mapperUser">
+
+    <insert id="insert" parameterType="hashmap">
+        insert into 
+            tb_user (userid, passwd, email, name, mobile, insertdt)
+        values (#{userid}, #{passwd}, #{email}, #{name}, #{mobile}, #{insertdt})
+    </insert>
+    
+    <select id="setUserOverlap" parameterType="string" resultType="ModelUser">
+        select userid
+            from tb_user
+                where userid = #{userid}
+    </select>
+    
+    <select id="login" parameterType="hashmap" resultType="ModelUser">
+        select *
+            from tb_user
+                where retireyn = 1
+                    and userid = #{userid}
+                    and passwd = #{passwd}
+    </select>
+    
+    <update id="logout" parameterType="string">
+    </update>
+    
+    <update id="updateUserInfo" parameterType="ModelUser">
+        update tb_user
+            set userid = #{updateuid}, updatedt = #{updatedt}
+                where userid = #{userid} and passwd = #{passwd}
+    </update>
+    
+    <update id="updatePasswd" parameterType="ModelUser">
+        update tb_user
+            set passwd = #{updateupw}, updatedt = #{updatedt}
+                where userid = #{userid} and passwd = #{passwd}
+    </update>
+    
+    <update id="deleteUser" parameterType="String">
+        update tb_user
+        set retireyn = 0
+        where userid = #{userid}
+    </update>
+    
+    <select id="selectUserOne" parameterType="string" resultType="ModelUser">
+        select *
+            from tb_user
+                where 1=1
+                    <if test="userid != null and userid != ''">
+                    and userid = #{userid}
+                    </if>
+                    <if test="name != null and name != ''">
+                    and userid = #{name}
+                    </if>
+                    <if test="mobile != null and mobile != ''">
+                    and mobile = #{mobile}
+                    </if>
+    </select>
+    
+    <select id="selectUserList" parameterType="string" resultType="ModelUser">
+            select *
+            from tb_user
+                where 1=1
+                    <if test="userid != null">
+                    
+                    and userid = #{userid}
+                    </if>
+                    <if test="name != null">
+                    and userid = #{name}
+                    </if>
+                    <if test="mobile != null">
+                    and mobile = #{mobile}
+                    </if>
+        
+    </select>
+
+</mapper>
